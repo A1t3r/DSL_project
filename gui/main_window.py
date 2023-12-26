@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import ttk, messagebox
+
 import tksheet
 from typing import Sequence
 
@@ -25,35 +27,39 @@ class MainWindow:
         self._clusterizer = Clusterizer(model=cs.model, n_clusters=cs.n_clusters)
         self._cluster_graphs_creator = ClusterGraphsCreator()
 
-        # Change number of clusters
-        tk.Label(text='Number of clusters').pack()
+        #  Define protocol handlers
+        #  Close window and destroy Python proccess
+        self._root.protocol("WM_DELETE_WINDOW", self._on_closing)
+
+        #  Change number of clusters
+        ttk.Label(text='Number of clusters').pack()
         self._n_clusters_entry= tk.Entry()
         self._n_clusters_entry.pack(padx=6, pady=6)
-        tk.Button(text="Change number of clusters", command=self._change_n_clusters).pack()
+        ttk.Button(text="Change number of clusters", command=self._change_n_clusters).pack()
 
         #  Display graph
-        tk.Button(text="Display Graph", command=self._display_graph).pack()
+        ttk.Button(text="Display Graph", command=self._display_graph).pack()
 
         #  Draw Graph
         self._canvas = FigureCanvasTkAgg(self._cluster_graphs_creator.fig)
         self._canvas.get_tk_widget().pack(side=tk.RIGHT)
 
         #  Add data dynamically
-        self._data_entry_x = tk.Entry()
+        self._data_entry_x = ttk.Entry()
         self._data_entry_x.pack(side=tk.BOTTOM, padx=6, pady=6)
-        tk.Label(text=ds.x_name).pack(side=tk.BOTTOM)
+        ttk.Label(text=ds.x_name).pack(side=tk.BOTTOM)
 
         self._data_entry_y = tk.Entry()
         self._data_entry_y.pack(side=tk.BOTTOM, padx=6, pady=6)
-        tk.Label(text=ds.y_name).pack(side=tk.BOTTOM)
+        ttk.Label(text=ds.y_name).pack(side=tk.BOTTOM)
 
-        tk.Button(text="Add data", command=self._add_data).pack(side=tk.BOTTOM)
+        ttk.Button(text="Add data", command=self._add_data).pack(side=tk.BOTTOM)
 
         #  Dump data
-        tk.Button(text="Dump data", command=self._dump_data).pack(side=tk.BOTTOM)
+        ttk.Button(text="Dump data", command=self._dump_data).pack(side=tk.BOTTOM)
 
         # Load data
-        tk.Button(text="Load data", command=self._load_data).pack(side=tk.BOTTOM)
+        ttk.Button(text="Load data", command=self._load_data).pack(side=tk.BOTTOM)
 
         #  Display DataFrame
         self._sheet = tksheet.Sheet(self._root)
@@ -92,6 +98,10 @@ class MainWindow:
     def _load_data(self) -> None:
         #  TODO
         pass
+
+    def _on_closing(self) -> None:
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self._root.quit()
 
     def mainloop(self) -> None:
         self._root.mainloop()
