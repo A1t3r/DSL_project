@@ -1,0 +1,12 @@
+WINDOW_SETTINGS:
+  SIZE: '900x700'
+  TITLE: 'DSL TEST'
+
+CLUSTERIZER_SETTINGS:
+  N_CLUSTERS: 2
+
+DATA_SETTINGS:
+  PATH: data/processed_weather_data.csv
+  DATE_NAME: 'Formatted Date'
+  X_NAME: 'Temperature (C)'
+  Y_NAME: 'Humidity'
