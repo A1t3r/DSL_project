@@ -32,7 +32,7 @@ class MainWindow:
         #  Close window and destroy Python process
         self._root.protocol("WM_DELETE_WINDOW", self._on_closing)
 
-        image1 = Image.open("/Users/kirilldobrovolskij/Desktop/img/kalendar.png")
+        image1 = Image.open("img/kalendar.png")
         image1 = image1.resize((60, 60))
         self._image1 = ImageTk.PhotoImage(image1)
         label1 = tk.Label(self._root, image=self._image1)
@@ -40,7 +40,7 @@ class MainWindow:
         label1.place(x=665, y=30)
         label1.configure(bg="white")
 
-        image2 = Image.open("/Users/kirilldobrovolskij/Desktop/img/thermometer.png")
+        image2 = Image.open("img/thermometer.png")
         image2 = image2.resize((30, 90))
         self._image2 = ImageTk.PhotoImage(image2)
         label2 = tk.Label(self._root, image=self._image2)
@@ -48,7 +48,7 @@ class MainWindow:
         label2.place(x=680, y=115)
         label2.configure(bg="white")
 
-        image3 = Image.open("/Users/kirilldobrovolskij/Desktop/img/water.png")
+        image3 = Image.open("img/water.png")
         image3 = image3.resize((60, 60))
         self._image3 = ImageTk.PhotoImage(image3)
         label3 = tk.Label(self._root, image=self._image3)
@@ -56,7 +56,7 @@ class MainWindow:
         label3.place(x=665, y=250)
         label3.configure(bg="white")
 
-        image4 = Image.open("/Users/kirilldobrovolskij/Desktop/img/sunny.png")
+        image4 = Image.open("img/sunny.png")
         image4 = image4.resize((60, 60))
         self._image4 = ImageTk.PhotoImage(image4)
         label4 = tk.Label(self._root, image=self._image4)
@@ -64,7 +64,7 @@ class MainWindow:
         label4.place(x=1035, y=690)
         label4.configure(bg="white")
 
-        image5 = Image.open("/Users/kirilldobrovolskij/Desktop/img/sunny1.png")
+        image5 = Image.open("img/sunny1.png")
         image5 = image5.resize((60, 60))
         self._image5 = ImageTk.PhotoImage(image5)
         label5 = tk.Label(self._root, image=self._image5)
@@ -123,7 +123,6 @@ class MainWindow:
         self._sheet.headers([ds.x_name, ds.y_name])
         self._sheet.set_sheet_data(list(self._data_storage.preprocess().to_numpy()))
 
-        self._root.configure(bg="Black")
 
     def _run_predict_cycle(self) -> Sequence:
         x = self._data_storage.preprocess()
