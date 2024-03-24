@@ -7,22 +7,23 @@ import numpy as np
 
 import csv
 import sys
+import pandas as pd
 
 
 def fmt(x, y):
-    csv_file = csv.reader(open('data/processed_weather_data.csv', "r"),
-                          delimiter=',')
-    x = round(float(x), 6)
-    y = round(float(y), 6)
-    for row in csv_file:
-        flag = False
-        for row in csv_file:
-            if not flag:
-                flag = True
-                continue
-            else:
-                if x == round(float(row[2]), 6) and y == round(float(row[3]), 6):
-                    return f'{date.fromisoformat(row[1].split(" ")[0])}'.format(x=x, y=y)
+    x = round(float(x), 2)
+    y = round(float(y), 2)
+    default_date = '2012-12-23'
+    df = pd.read_csv('data/processed_weather_data.csv', index_col=False)
+    result = df[df['Temperature (C)'] == x]
+    temperature_foundation = df[df['Temperature (C)'].astype(str).str.contains(str(x))]
+    humidity_foundation = df[df['Humidity'].astype(str).str.contains(str(y))]
+    if temperature_foundation.shape[0]:
+        default_date = temperature_foundation.iloc[0]['Formatted Date']
+    elif humidity_foundation.shape[0]:
+        default_date = humidity_foundation.iloc[0]['Formatted Date']
+    return f'{default_date}'.format(x=x, y=y)
+
 
 class FollowDotCursor(object):
 
@@ -34,14 +35,11 @@ class FollowDotCursor(object):
         y = y[mask]
         self._points = np.column_stack((x, y))
         self.offsets = offsets
-        self.x_used = 1
-        self.y_used = 1
-        y = y[np.abs(y-y.mean()) <= 3*y.std()]
+        y = y[np.abs(y - y.mean()) <= 3 * y.std()]
         self.scale = x.ptp()
         self.scale = y.ptp() / self.scale if self.scale else 1
         self.tree = spatial.cKDTree(self.scaled(self._points))
         self.formatter = formatter
-        self.tolerance = tolerance
         self.ax = ax
         self.fig = ax.figure
         self.ax.xaxis.set_label_position('top')
@@ -75,11 +73,11 @@ class FollowDotCursor(object):
     def setup_annotation(self):
         """Draw and hide the annotation box."""
         annotation = self.ax.annotate(
-            '', xy=(1,1), ha = 'right',
-            xytext = self.offsets, textcoords = 'offset points', va = 'bottom',
-            bbox = dict(
+            '', xy=(1, 1), ha='right',
+            xytext=self.offsets, textcoords='offset points', va='bottom',
+            bbox=dict(
                 boxstyle='round,pad=0.4', fc='white', alpha=0.85),
-            arrowprops = dict(
+            arrowprops=dict(
                 arrowstyle='-|>', connectionstyle='arc3,rad=0'))
         return annotation
 
