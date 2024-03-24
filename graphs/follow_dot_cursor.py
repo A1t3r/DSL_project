@@ -1,33 +1,16 @@
-from datetime import datetime
-from datetime import date
-
 import matplotlib.pyplot as plt
 import scipy.spatial as spatial
 import numpy as np
 
-import csv
-import sys
-import pandas as pd
 
-
-def fmt(x, y):
-    x = round(float(x), 2)
-    y = round(float(y), 2)
-    default_date = '2012-12-23'
-    df = pd.read_csv('data/processed_weather_data.csv', index_col=False)
-    result = df[df['Temperature (C)'] == x]
-    temperature_foundation = df[df['Temperature (C)'].astype(str).str.contains(str(x))]
-    humidity_foundation = df[df['Humidity'].astype(str).str.contains(str(y))]
-    if temperature_foundation.shape[0]:
-        default_date = temperature_foundation.iloc[0]['Formatted Date']
-    elif humidity_foundation.shape[0]:
-        default_date = humidity_foundation.iloc[0]['Formatted Date']
-    return f'{default_date}'.format(x=x, y=y)
+def fmt(x, y, df):
+    return f'{df[(df["Humidity"]==y) & (df["Temperature (C)"]==x)]["Formatted Date"].iloc[0]}'
 
 
 class FollowDotCursor(object):
 
-    def __init__(self, ax, x, y, tolerance=5, formatter=fmt, offsets=(-20, 20)):
+    def __init__(self, ax, x, y, df, tolerance=5, formatter=fmt, offsets=(-20, 20)):
+        self._df = df
         x = np.asarray(x, dtype='float')
         y = np.asarray(y, dtype='float')
         mask = ~(np.isnan(x) | np.isnan(y))
@@ -64,7 +47,7 @@ class FollowDotCursor(object):
         annotation = self.annotation
         x, y = self.snap(x, y)
         annotation.xy = x, y
-        annotation.set_text(fmt(x, y))
+        annotation.set_text(fmt(x, y, self._df))
         self.dot.set_offsets(np.column_stack((x, y)))
         bbox = self.annotation.get_window_extent()
         self.fig.canvas.blit(bbox)

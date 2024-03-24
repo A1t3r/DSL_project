@@ -12,6 +12,10 @@ class DataStorage:
         self._y = y
 
     @property
+    def df(self) -> DataFrame:
+        return self._df
+
+    @property
     def x(self) -> DataFrame:
         return self._df[self._x]
 

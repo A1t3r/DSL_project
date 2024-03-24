@@ -133,7 +133,7 @@ class MainWindow:
     def _display_graph(self) -> None:
         labels = self._run_predict_cycle()
         self._cluster_graphs_creator.plot(
-            self._data_storage.x, self._data_storage.y, labels=labels
+            self._data_storage.x, self._data_storage.y, self._data_storage.df, labels=labels
         )
         self._canvas.draw()
 
