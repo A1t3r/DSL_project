@@ -81,8 +81,6 @@ class MainWindow:
 
         label = tk.Label(self._root, text="Дата наблюдения:", font=('Arial', 30), bg="white")
         label.place(x=30, y=40)
-        self._n_clusters_entry = tk.Entry(font=('Arial', 26))
-        self._n_clusters_entry.place(x=350, y=40)
 
         b5 = tk.Button(self._root, text="Изменить количество кластеров", command=self._change_n_clusters, font=('Arial', 30))
         b5.place(x=1060, y=880)
